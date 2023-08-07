@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -35,11 +34,11 @@ public class StudentService {
         student.getMonths().add(month);
 
 
-//        //add Month to Year
-//        Year year = new Year();
-//        year.setYear(studentDto.getYear());
-//        year.getMonths().add(month);
-//        student.getYears().add(year);
+        //add Month to Year
+        Year year = new Year();
+        year.setYear(studentDto.getYear());
+        year.getMonths().add(month);
+        student.getYears().add(year);
 
         System.out.println("Query fired ------------>");
         //save data to the database
@@ -159,34 +158,50 @@ public class StudentService {
     public Student updateStudent(StudentDto studentDto){
         Student student = getStudentById(studentDto.getStudentId());
 
-        Collection<Month> months = student.getMonths();
-
-        Optional<Month> monthOptional = months.stream()
-                .filter(m -> m.getMonthName().equalsIgnoreCase(studentDto.getMonthName()))
-                .findFirst();
-
+        Collection<Year> years = student.getYears();
+        Optional<Year> optionalYear = years.stream().filter(y-> y.getYear().equals(studentDto.getYear())).findFirst();
+        Year year;
         Month month;
         Week week;
         Week updatedWeek;
-        if(monthOptional.isPresent()){
-           month = monthOptional.get();
-           Collection<Week> weeks = month.getWeeks();
-           Optional<Week> weekOptional = weeks.stream().filter(w-> w.getWeekNum().equals(studentDto.getWeekNum())).findFirst();
-           if(weekOptional.isPresent()) {
-               System.out.println("Month Name ---------------> " + month.getMonthName());
-               week = weekOptional.get();
-               System.out.println("Week Num ---------------> " + week.getWeekNum());
-               updatedWeek = updateWeek(week, studentDto);
+        if(optionalYear.isPresent()){
+            year = optionalYear.get();
+            Collection<Month> months = year.getMonths();
 
-           }else {
-               System.out.println("Week Not found in the month ---------------> " + month.getMonthName());
-               week = new Week();
-               week.setWeekNum(studentDto.getWeekNum());
-               updatedWeek = updateWeek(week, studentDto);
-               month.getWeeks().add(updatedWeek);
-           }
+            Optional<Month> monthOptional = months.stream()
+                    .filter(m -> m.getMonthName().equalsIgnoreCase(studentDto.getMonthName()))
+                    .findFirst();
 
-        }else{
+            if(monthOptional.isPresent()){
+                month = monthOptional.get();
+                Collection<Week> weeks = month.getWeeks();
+                Optional<Week> weekOptional = weeks.stream().filter(w-> w.getWeekNum().equals(studentDto.getWeekNum())).findFirst();
+                if(weekOptional.isPresent()) {
+                    week = weekOptional.get();
+                    updatedWeek = updateWeek(week, studentDto);
+
+                }else {
+                    week = new Week();
+                    week.setWeekNum(studentDto.getWeekNum());
+                    updatedWeek = updateWeek(week, studentDto);
+                    month.getWeeks().add(updatedWeek);
+
+                }
+
+            }else{
+                week = new Week();
+                week.setWeekNum(studentDto.getWeekNum());
+                updatedWeek = updateWeek(week, studentDto);
+
+                month = new Month();
+                month.setMonthName(studentDto.getMonthName());
+                month.getWeeks().add(updatedWeek);
+                year.getMonths().add(month);
+               // student.getMonths().add(month);
+
+            }
+
+        }else{ //if year is not present, do the following
             week = new Week();
             week.setWeekNum(studentDto.getWeekNum());
             updatedWeek = updateWeek(week, studentDto);
@@ -194,11 +209,17 @@ public class StudentService {
             month = new Month();
             month.setMonthName(studentDto.getMonthName());
             month.getWeeks().add(updatedWeek);
-            student.getMonths().add(month);
 
+            year = new Year();
+            year.setYear(studentDto.getYear());
+            year.getMonths().add(month);
+
+            student.getYears().add(year);
         }
-        
-        System.out.println("update query fired --------------->");
-        return studentRepo.save(student);
+
+            System.out.println("update query fired --------------->");
+            return studentRepo.save(student);
     }
+
+
 }

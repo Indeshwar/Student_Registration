@@ -25,7 +25,7 @@ public class Year {
     private Collection<Student> students = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "year", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private Collection<Month> months = new ArrayList<>();
 
 }

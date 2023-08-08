@@ -177,5 +177,29 @@ public class StudentService {
 
     }
 
+    public Integer getTotalAbsentDaysInMonth(StudentDto studentDto){
+        Student s = getStudentById(studentDto.getStudentId());
+        Collection<Year> years = s.getYears();
+        Optional<Year> year = years.stream().filter(y-> y.getYear().equals(studentDto.getYear())).findFirst();
+        Integer totalAbsentDays = 0;
+
+        if(year.isPresent()){
+            Collection<Month> months = year.get().getMonths();
+            Optional<Month> month = months.stream().filter(m-> m.getMonthName().equalsIgnoreCase(studentDto.getMonthName())).findFirst();
+            if(month.isPresent()){
+                Collection<Week> weeks = month.get().getWeeks();
+                for(Week w : weeks){
+                    totalAbsentDays += w.getTotalAbsentDay();
+                }
+
+            }else{
+                return 0;
+            }
+
+        }else{
+            return 0;
+        }
+        return totalAbsentDays;
+    }
 
 }

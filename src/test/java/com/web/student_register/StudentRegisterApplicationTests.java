@@ -31,4 +31,15 @@ class StudentRegisterApplicationTests {
 //
 //	}
 
+	@Test
+	public void getTotalAbsentDaysInMonth(){
+		StudentDto s = new StudentDto();
+		s.setStudentId(5L);
+		s.setYear(2023);
+		s.setMonthName("january");
+		Integer result = studentService.getTotalAbsentDaysInMonth(s);
+		Assertions.assertEquals(4, result);
+
+	}
+
 }

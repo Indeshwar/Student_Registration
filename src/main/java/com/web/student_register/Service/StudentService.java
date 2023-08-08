@@ -5,6 +5,7 @@ import com.web.student_register.entity.Month;
 import com.web.student_register.entity.Student;
 import com.web.student_register.entity.Week;
 import com.web.student_register.entity.Year;
+import com.web.student_register.exception.StudentNotFoundException;
 import com.web.student_register.repository.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,8 +52,7 @@ public class StudentService {
     }
 
     public Student getStudentById(Long studentId){
-
-        return studentRepo.findById(studentId).orElseThrow();
+        return studentRepo.findById(studentId).orElseThrow(()-> new StudentNotFoundException(studentId + " not found"));
     }
 
     public Week updateWeek(Week w, StudentDto s) {
@@ -169,6 +169,12 @@ public class StudentService {
 
             System.out.println("update query fired --------------->");
             return studentRepo.save(student);
+    }
+
+    public void deleteStudent(Long Id){
+        Student student = getStudentById(Id);
+        studentRepo.delete(student);
+
     }
 
 

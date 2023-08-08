@@ -55,56 +55,6 @@ public class StudentService {
         return studentRepo.findById(studentId).orElseThrow();
     }
 
-    public Week getWeek(Week w, StudentDto s) {
-        HashMap<String, Integer> dayMap = new HashMap<>();
-        dayMap.put("sunday", w.getSunday());
-        dayMap.put("monday", w.getMonday());
-        dayMap.put("tuesday", w.getTuesday());
-        dayMap.put("wednesday", w.getWednesday());
-        dayMap.put("thursday", w.getThursday());
-        dayMap.put("friday", w.getFriday());
-        dayMap.put("saturday", w.getSaturday());
-
-        String dayName = s.getDayName();
-//            if student is present add 1, otherwise add -1
-        if (s.isAttendance()) {
-            if (dayMap.get(dayName) == null) { //set initial case
-                w.setDay(1, dayName);
-                w.setTotalPresentDay(w.getTotalPresentDay() + 1);
-                w.setConsecutiveDay(0);
-            } else if (dayMap.get(dayName) == -1) { //update the previous day
-                w.setDay(1, dayName); //update present
-                w.setTotalPresentDay(w.getTotalPresentDay() + 1); // update the presentDay
-                w.setTotalAbsentDay(w.getTotalAbsentDay() - 1); //update the absentDay
-                w.setConsecutiveDay(0);
-
-            }
-
-        } else if (!s.isAttendance() && !s.isHoliday()) {
-            Integer totalConsecutiveDays = w.getConsecutiveDay() + 1;
-            if (dayMap.get(dayName) == null) {
-                w.setDay(-1, dayName);
-                w.setTotalAbsentDay(w.getTotalAbsentDay() + 1);
-                w.setConsecutiveDay(totalConsecutiveDays);
-            } else if (dayMap.get(dayName) == 1) {
-                w.setDay(-1, dayName);
-                ;  // update the presentDay
-                w.setTotalAbsentDay(w.getTotalAbsentDay() + 1); //update the absentDay
-                w.setTotalPresentDay(w.getTotalPresentDay() - 1); // update the presentDay
-                w.setConsecutiveDay(totalConsecutiveDays);  //update the consecutive day
-            }
-
-        } else if (s.isHoliday()) {
-            w.setDay(0, dayName);
-            Integer totalHolidays = w.getTotalHoliday() + 1;
-            w.setTotalHoliday(totalHolidays);
-
-        }
-        return w;
-
-
-    }
-
     public Week updateWeek(Week w, StudentDto s) {
         HashMap<String, Integer> map = new HashMap<>();
         map.put("sunday", w.getSunday());

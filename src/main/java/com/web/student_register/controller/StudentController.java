@@ -51,4 +51,10 @@ public class StudentController {
     public void deleteStudent(@PathVariable Long studentId){
         studentService.deleteStudent(studentId);
     }
+
+    @GetMapping("/cont-total-absent")
+    public ResponseEntity<Integer> getTotalAbsentDaysInMonth(@RequestBody StudentDto studentDto){
+        Integer totalDaysInMonth = studentService.getTotalAbsentDaysInMonth(studentDto);
+        return new ResponseEntity<>(totalDaysInMonth, HttpStatus.OK);
+    }
 }

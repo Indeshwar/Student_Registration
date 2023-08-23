@@ -6,6 +6,7 @@ import com.web.student_register.Service.CustomUserService;
 import com.web.student_register.Service.StudentService;
 import com.web.student_register.entity.Student;
 import com.web.student_register.entity.User;
+import com.web.student_register.response.LogInResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class StudentController {
     public ResponseEntity<User> registerUser(@RequestBody UserDto userDto){
         User user = userService.registerUser(userDto);
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/user/logIn")
+    public ResponseEntity<LogInResponse> userLogIn(@RequestBody UserDto user){
+        LogInResponse response = userService.userLogIn(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/save_student")

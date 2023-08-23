@@ -12,3 +12,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+
+jwt:
+  auth:
+    app: Spring-Security-App
+    secret_key: testkey#secret@12334
+    expires_in: 3600

@@ -9,9 +9,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -20,9 +23,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private JWTAuthenticationFilter jwtAuthenticationFilter;
 
     //authenticate the user by using input userName and password
-    //compare stored hash value with input password that is hashed by passwordEncoder
+    //compare with hash value for password and input pass
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -33,18 +40,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         log.info("Before filter ----------->");
-        //Allow those api not to authenticate
-        http.authorizeRequests().antMatchers("api/v1/saveUser", "api/v1/hello", "api/v1/user/logIn")
-                .permitAll();
-
-        //Check authentication for this api
-        http.authorizeRequests().antMatchers("/api/v1/get_students").authenticated();
 
         //it disable to be generated csrf token automatically by spring
         //so that it won't be included in certain type of requests like POST, PUT, and DELETE
         http.csrf().disable();
-        log.info("After filter ----------->");
-
+        http.authorizeRequests().antMatchers("api/v1/saveUser", "api/v1/user/logIn").permitAll()
+                .antMatchers("/api/v1/auth/**").authenticated()
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+                .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);//jwtAuthenticationFilter's executed before UsernamePasswordAuthenticationFilter
 
     }
 
@@ -59,5 +63,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
 
 }

@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //it disable to be generated csrf token automatically by spring
         //so that it won't be included in certain type of requests like POST, PUT, and DELETE
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("api/v1/saveUser", "api/v1/user/logIn").permitAll()
+        http.authorizeRequests().antMatchers("/api/v1/saveUser", "/api/v1/user/logIn").permitAll()
                 .antMatchers("/api/v1/auth/**").authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

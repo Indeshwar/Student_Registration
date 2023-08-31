@@ -1,8 +1,14 @@
 package com.web.student_register.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,5 +21,19 @@ public class Role {
     @GeneratedValue(strategy= GenerationType.AUTO )
     private Long roleId;
     private String roleName;
+
+    @JsonBackReference
+    @ManyToMany(mappedBy="roles")
+    private Collection<User> users;
+
+
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(
+            name="role_permission",
+            joinColumns=@JoinColumn(name ="role_id", referencedColumnName="roleId"),
+            inverseJoinColumns = @JoinColumn(name= "permission_id", referencedColumnName= "permissionId")
+    )
+    private Set<Permission> permissions;
 
 }

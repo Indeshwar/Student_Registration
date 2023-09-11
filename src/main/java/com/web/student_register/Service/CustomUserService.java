@@ -24,9 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 @Slf4j
 @Service
@@ -60,13 +58,30 @@ public class CustomUserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),
                 user.getPassword(),
-                mapRoleToAuthority(user.getRoles())
+                mapRoleToAuthority(getPermissions(user.getRoles()))
         );
     }
 
+    private List<String> getPermissions(Collection<Role> roles){
+        List<String> permissions = new ArrayList<String>();
+        List<Permission> collection = new ArrayList<Permission>();
+
+        for(Role r: roles){
+            permissions.add(r.getRoleName());
+            collection.addAll(r.getPermissions());
+        }
+
+        for(Permission p: collection){
+            permissions.add(p.getPermissionName());
+        }
+        return permissions;
+
+    }
+
     //Map to Role to Authority
-    public Collection<? extends GrantedAuthority> mapRoleToAuthority(Collection<Role> roles){
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
+    private Collection<? extends GrantedAuthority> mapRoleToAuthority(List<String> permissions){
+
+        return permissions.stream().map(p -> new SimpleGrantedAuthority(p)).collect(Collectors.toList());
     }
 
 

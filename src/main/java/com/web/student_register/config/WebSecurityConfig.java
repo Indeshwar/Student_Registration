@@ -45,7 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //so that it won't be included in certain type of requests like POST, PUT, and DELETE
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/api/v1/saveUser", "/api/v1/user/logIn").permitAll()
-                .antMatchers("/api/v1/auth/**").authenticated()
+                .antMatchers("/api/v1/auth/student/*").hasRole("USER")
+                .antMatchers("/api/v1/auth/get_students").hasRole("ADMIN").anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);//jwtAuthenticationFilter's executed before UsernamePasswordAuthenticationFilter

@@ -1,5 +1,6 @@
 package com.web.student_register.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -19,6 +20,9 @@ public class Student {
     private Long studentId;
     private String studentName;
 
+    @JsonBackReference
+    @ManyToMany(mappedBy = "students")
+    private Collection<User> users = new ArrayList<>();
     @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "student_week",

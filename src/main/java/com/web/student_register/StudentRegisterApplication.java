@@ -37,8 +37,8 @@ public class StudentRegisterApplication implements CommandLineRunner {
 		userPermission.add(updatePermission);
 
 
-		customerService.createRole("ROLE_ADMIN", adminPermission);
-		customerService.createRole("ROLE_USER", userPermission);
+		customerService.createRole("ROLE_TEACHER", adminPermission);
+		customerService.createRole("ROLE_STUDENT", userPermission);
 
 
 	}

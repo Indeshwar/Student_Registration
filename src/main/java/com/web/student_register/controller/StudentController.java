@@ -38,46 +38,36 @@ public class StudentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("auth/save_student")
+    @PostMapping("student/save_student")
     public ResponseEntity<Student> saveStudent(@RequestBody StudentDto studentDto){
         Student student = studentService.saveStudent(studentDto);
         return new ResponseEntity<>(student, HttpStatus.OK);
 
     }
 
-    @GetMapping("auth/get_students")
-    public ResponseEntity<List<Student>> getStudents(){
-        List<Student> students = studentService.getStudents();
-        return new ResponseEntity<>(students, HttpStatus.OK);
 
-    }
-
-    @GetMapping("auth/student/{studentId}")
+    @GetMapping("student/{studentId}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long studentId){
         Student s = studentService.getStudentById(studentId);
         return  new ResponseEntity<>(s, HttpStatus.OK);
     }
 
-   @PutMapping("auth/update")
+   @PutMapping("student/update")
     public ResponseEntity<Student> updateStudent(@RequestBody StudentDto s){
         Student student = studentService.updateStudent(s);
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
-    @DeleteMapping("auth/delete/{studentId}")
+    @DeleteMapping("student/delete/{studentId}")
     public void deleteStudent(@PathVariable Long studentId){
         studentService.deleteStudent(studentId);
     }
 
-    @GetMapping("auth/cont-total-absent")
+    @GetMapping("student/cont-total-absent")
     public ResponseEntity<Integer> getTotalAbsentDaysInMonth(@RequestBody StudentDto studentDto){
         Integer totalDaysInMonth = studentService.getTotalAbsentDaysInMonth(studentDto);
         return new ResponseEntity<>(totalDaysInMonth, HttpStatus.OK);
     }
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello Java Alliance";
-    }
 
 }

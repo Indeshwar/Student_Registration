@@ -2,9 +2,7 @@ package com.web.student_register.Service;
 
 import com.web.student_register.Dto.UserDto;
 import com.web.student_register.config.JWTTokenHelper;
-import com.web.student_register.entity.Permission;
-import com.web.student_register.entity.Role;
-import com.web.student_register.entity.User;
+import com.web.student_register.entity.*;
 import com.web.student_register.repository.PermissionRepo;
 import com.web.student_register.repository.RoleRePo;
 import com.web.student_register.repository.UserRepo;
@@ -95,6 +93,16 @@ public class CustomUserService implements UserDetailsService {
         Role role = roleRePo.getByRoleName(userDto.getRoleName());
         role.setRoleName(userDto.getRoleName());
         user.setRoles(Arrays.asList(role));
+        String name = userDto.getName();
+        if(userDto.getRoleName().equalsIgnoreCase("role_teacher")){
+            Teacher teacher = new Teacher();
+            teacher.setTeacherName(name);
+            user.getTeachers().add(teacher);
+        }else if(userDto.getRoleName().equalsIgnoreCase("role_student")){
+            Student student = new Student();
+            student.setStudentName(name);
+            user.getStudents().add(student);
+        }
 
         return userRepo.save(user);
 

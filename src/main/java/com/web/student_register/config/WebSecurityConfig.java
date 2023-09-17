@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //so that it won't be included in certain type of requests like POST, PUT, and DELETE
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/api/v1/saveUser", "/api/v1/user/logIn").permitAll()
-                .antMatchers("/api/v1/student/**").hasRole("STUDENT")
+                .antMatchers("/api/v1/student/**").hasAnyRole("STUDENT", "TEACHER")
                 .antMatchers("/api/v1/teacher/**").hasRole("TEACHER").anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

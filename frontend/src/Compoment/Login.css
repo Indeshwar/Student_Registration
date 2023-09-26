@@ -1,0 +1,36 @@
+.h1f{
+    font-weight: bold;
+    font-style: italic;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 18px;
+    text-align: center;
+}
+.h2f{
+    font-size: 14px;
+    text-align: center;
+    padding: 12px;
+}
+
+.btn{
+    width: 100%;
+}
+
+.h2x {
+    margin-top: 15%;
+    text-align: center;
+    
+}
+
+.colm{
+    margin-left: 33.34%;
+
+}
+
+.footer{
+    margin-top: 20%;
+    padding: 20px;
+    text-align: center;
+    
+}
+
+

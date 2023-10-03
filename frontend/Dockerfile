@@ -8,3 +8,4 @@ COPY package.json .
 COPY . .
 #start the app
 CMD ["npm", "start"]
+

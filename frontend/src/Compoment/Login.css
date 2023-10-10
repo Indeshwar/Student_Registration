@@ -9,6 +9,7 @@
     font-size: 14px;
     text-align: center;
     padding: 12px;
+    text-decoration: none;
 }
 
 .btn{
@@ -19,6 +20,7 @@
     margin-top: 15%;
     text-align: center;
     
+    
 }
 
 .colm{
@@ -26,11 +28,44 @@
 
 }
 
-.footer{
-    margin-top: 20%;
+footer{
+    background-color: rgb(84, 81, 81);
+    margin-top: 15%;
     padding: 20px;
     text-align: center;
     
 }
+
+.single-box{
+    color: white
+
+}
+
+.single-box h2{
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 8px;
+}
+
+.single-box ul{
+    list-style: none;
+    padding: 0;
+}
+
+.main-content{
+    margin-top: 15%;
+}
+
+.main-content-for-reg{
+    margin-top: 4%;
+}
+
+.main-content-2{
+    margin: auto;
+    text-align: center;
+}
+
+
 
 

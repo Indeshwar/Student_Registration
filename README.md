@@ -1,1 +1,2 @@
-This is the group project which I am currently working on it.
+#Student Registration # Group Project
+Spring boot project, get the information of the students based on their Id number. 
